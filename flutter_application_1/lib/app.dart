@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'home.dart';
 import 'login.dart';
 
 class ShrineApp extends StatelessWidget {
@@ -8,10 +10,15 @@ class ShrineApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Shrine',
-      initialRoute: '/login',
+      // Esta es la pantalla que se verá primero al abrir la app
+      initialRoute: '/login', 
+      // Aquí defines el mapa de las rutas
       routes: {
         '/login': (BuildContext context) => const LoginPage(),
+        '/': (BuildContext context) => const HomePage(),
       },
+      // Este tema se personalizará más adelante en el MDC-103
+      theme: ThemeData.light(useMaterial3: true),
     );
   }
 }

@@ -42,7 +42,6 @@ TextField(
   obscureText: true, // Esto oculta los caracteres (puntos)
 ),
 
-            // TODO: Añadir TextField para Password (Paso 3 del codelab)
             const SizedBox(height: 12.0),
 OverflowBar(
   alignment: MainAxisAlignment.end,
@@ -54,12 +53,11 @@ OverflowBar(
       },
     ),
     ElevatedButton(
-      child: const Text('NEXT'),
-      onPressed: () {
-        // Al presionar, navegamos a la siguiente pantalla (MDC-102)
-        Navigator.pop(context);
-      },
-    ),
+  child: const Text('NEXT'),
+  onPressed: () {
+    Navigator.pop(context); // Esto cierra el Login y muestra el '/' definido en app.dart
+  },
+),
   ],
 ),
           ],

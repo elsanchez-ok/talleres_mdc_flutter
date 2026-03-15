@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'app.dart'; // <-- Importante que esté este import
+import 'app.dart';
 
 void main() => runApp(const ShrineApp());

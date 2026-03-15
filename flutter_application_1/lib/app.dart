@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'login.dart';
+import 'backdrop.dart'; // El archivo que creamos antes
+import 'models/product.dart'; // Para las categorías
 
 class ShrineApp extends StatelessWidget {
   const ShrineApp({super.key});
@@ -8,11 +10,19 @@ class ShrineApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Shrine',
       initialRoute: '/login',
       routes: {
         '/login': (BuildContext context) => const LoginPage(),
-        '/': (BuildContext context) => const HomePage(),
+// En lib/app.dart (dentro de routes)
+'/': (BuildContext context) => Backdrop(
+      currentCategory: Category.all,
+      frontLayer: const HomePage(),
+      backLayer: Container(color: kShrinePink100), 
+      frontTitle: const Text('SHRINE'), // Título cuando está cerrado
+      backTitle: const Text('MENU'),   // Título cuando está abierto
+    ),
       },
       // 1. Aplicamos el nuevo tema aquí
       theme: _kShrineTheme, 
@@ -23,6 +33,8 @@ class ShrineApp extends StatelessWidget {
 // 2. Definimos el tema fuera de la clase
 final ThemeData _kShrineTheme = _buildShrineTheme();
 
+
+
 ThemeData _buildShrineTheme() {
   final ThemeData base = ThemeData.light(useMaterial3: true);
   return base.copyWith(
@@ -32,8 +44,8 @@ ThemeData _buildShrineTheme() {
       secondary: kShrinePink50,
       error: kShrineErrorRed,
     ),
-    // 3. Esto cambiará los textos automáticamente
-    textTheme: _buildShrineTextTheme(base.textTheme),
+    // 👇 ESTA ES LA LÍNEA QUE TE FALTA CONECTAR:
+    textTheme: _buildShrineTextTheme(base.textTheme), 
   );
 }
 

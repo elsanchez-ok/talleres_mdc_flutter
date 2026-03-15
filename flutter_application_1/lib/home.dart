@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; 
+import 'models/product.dart';
+import 'models/products_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-// Función para generar las tarjetas de la cuadrícula
+
   List<Card> _buildGridCards(BuildContext context) {
-    // Por ahora haremos 10 tarjetas de prueba
-    return List.generate(10, (int index) {
+    List<Product> products = ProductsRepository.loadProducts(Category.all);
+
+    if (products.isEmpty) {
+      return const <Card>[];
+    }
+
+    final NumberFormat formatter = NumberFormat.simpleCurrency(
+        locale: Localizations.localeOf(context).toString());
+
+    return products.map((product) {
       return Card(
         clipBehavior: Clip.antiAlias,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             AspectRatio(
-              aspectRatio: 18.0 / 11.0,
+              aspectRatio: 18 / 11,
               child: Image.asset(
-                'assets/images/diamond.png', // Logo temporal mientras bajamos las fotos
+                product.assetName,
+                package: product.assetPackage,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -22,23 +34,29 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
-                  Text('Título del producto'),
-                  SizedBox(height: 8.0),
-                  Text('L. 150.00'),
+                children: <Widget>[
+                  Text(
+                    product.name,
+                    style: Theme.of(context).textTheme.titleLarge,
+                    maxLines: 1,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    formatter.format(product.price),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ],
               ),
             ),
           ],
-        ),
+        ), // <-- Aquí quité el punto extra que tenías
       );
-    });
-  }
+    }).toList();
+  } // <-- Aquí se cierra la función correctamente
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Barra superior con botón de menú, título y buscador
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.menu),
@@ -62,12 +80,11 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      // Aquí irá la cuadrícula de productos (GridView)
       body: GridView.count(
-        crossAxisCount: 2, // Esto pone dos columnas
+        crossAxisCount: 2,
         padding: const EdgeInsets.all(16.0),
-        childAspectRatio: 8.0 / 9.0, // Controla el tamaño de las tarjetas
-        children: _buildGridCards(context), // Llama a la función de arriba
+        childAspectRatio: 8.0 / 9.0,
+        children: _buildGridCards(context),
       ),
     );
   }
